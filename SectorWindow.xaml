@@ -1,0 +1,125 @@
+﻿<Window x:Class="GeophysicsApp.SectorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Информация об участке" Height="550" Width="850"
+        Background="#F5F7FA"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        FontFamily="Segoe UI" FontSize="14">
+
+    <Grid Margin="20">
+        <TabControl Background="Transparent" BorderThickness="0" >
+            <TabControl.Resources>
+                <!-- Стиль для табов -->
+                <Style TargetType="TabItem">
+                    <Setter Property="Padding" Value="12,8"/>
+                    <Setter Property="Margin" Value="0,0,10,0"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                    <Setter Property="Foreground" Value="#555"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TabItem">
+                                <Border x:Name="Bd" Background="Transparent" 
+                                        BorderThickness="0,0,0,2" BorderBrush="Transparent"
+                                        Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter ContentSource="Header" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="Bd" Property="BorderBrush" Value="#3498db"/>
+                                        <Setter Property="Foreground" Value="#3498db"/>
+                                        <Setter TargetName="Bd" Property="Background" Value="#E8F1FB"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Bd" Property="Background" Value="#DCEEFF"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.Resources>
+
+            <!-- Вкладка 1: Схема участка -->
+            <TabItem Header="Схема участка">
+                <Grid Background="White" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Canvas с обводкой -->
+                    <Border Grid.Column="0" Background="#F9FBFE" CornerRadius="8" Margin="0,0,20,0" BorderBrush="#CED9E3" BorderThickness="1">
+                        <Canvas x:Name="sectorView" Margin="10"/>
+                    </Border>
+
+                    <!-- Правая колонка с данными -->
+                    <Grid Grid.Column="1" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Метки и поля -->
+                        <TextBlock Text="ID:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,5" Foreground="#34495e" FontWeight="SemiBold"/>
+                        <TextBox x:Name="sectorId" Grid.Row="0" Grid.Column="1" Width="160" IsReadOnly="True" Margin="5" Background="#ecf0f1" BorderBrush="#bdc3c7" BorderThickness="1" Padding="6"/>
+
+                        <TextBlock Text="Координаты:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Top" Margin="0,5" Foreground="#34495e" FontWeight="SemiBold"/>
+                        <ListBox x:Name="listCoordinates" Grid.Row="1" Grid.Column="1" Height="90" Margin="5" Background="#ecf0f1" BorderBrush="#bdc3c7" BorderThickness="1" Padding="5"/>
+
+                        <TextBlock Text="Площадь:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,5" Foreground="#34495e" FontWeight="SemiBold"/>
+                        <TextBox x:Name="sectorSquare" Grid.Row="2" Grid.Column="1" Width="160" IsReadOnly="True" Margin="5" Background="#ecf0f1" BorderBrush="#bdc3c7" BorderThickness="1" Padding="6"/>
+
+                        <TextBlock Text="Количество профилей:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0,5" Foreground="#34495e" FontWeight="SemiBold"/>
+                        <TextBox x:Name="profilesAmount" Grid.Row="3" Grid.Column="1" Width="160" IsReadOnly="True" Margin="5" Background="#ecf0f1" BorderBrush="#bdc3c7" BorderThickness="1" Padding="6"/>
+
+                        <TextBlock Text="Выберите профиль:" Grid.Row="4" Grid.ColumnSpan="2" Margin="0,15,0,8" FontWeight="SemiBold" Foreground="#34495e"/>
+
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto"  Grid.ColumnSpan="2" VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Center"  Grid.Row="5">
+                            <!-- Профили кнопками -->
+                            <StackPanel x:Name="buttonsPanel" Margin="0 0"  Orientation="Horizontal" >
+                                <!-- Пример кнопок профилей -->
+                            </StackPanel>
+                        </ScrollViewer>
+                      
+                        <!-- Кнопка назад -->
+                        <Button x:Name="buttonBack" Content="Назад" Grid.Row="6" Grid.ColumnSpan="2" Width="130" Height="38" Margin="0,20,0,0"
+                                Background="#7f8c8d" Foreground="White" FontWeight="Bold" BorderThickness="0" Cursor="Hand" Click="buttonBack_Click"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <!-- Вкладка 2: Данные о профилях -->
+            <TabItem Header="Данные о профилях">
+                <Grid Background="White">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <DataGrid x:Name="gridProfiles" Grid.Row="0" Margin="0 0 0 15" AutoGenerateColumns="True"
+                              RowBackground="#FAFAFA" AlternatingRowBackground="White"
+                              BorderBrush="#CED9E3" BorderThickness="1"
+                              FontSize="14"/>
+
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center" >
+                        <TextBlock Text="Выберите запись для редактирования/удаления" VerticalAlignment="Center" Margin="0 0 10 0" Foreground="#666"/>
+                        <Button x:Name="buttonEdit" Content="Редактировать" Height="35" Padding="15,0" Background="#3498db" Foreground="White" Margin="5" Cursor="Hand"/>
+                        <Button x:Name="buttonDelete" Content="Удалить" Height="35" Padding="15,0" Background="#e74c3c" Foreground="White" Margin="5" Cursor="Hand" Click="buttonDelete_Click"/>
+                        <Button x:Name="buttonAdd" Content="Добавить" Height="35" Padding="15,0" Background="#2ecc71" Foreground="White" Margin="5" Cursor="Hand"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

@@ -1,0 +1,144 @@
+﻿<Window x:Class="GeophysicsApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="GeophysicsApp" Height="500" Width="1250"
+        Background="#F5F7FA" FontFamily="Segoe UI" FontSize="14">
+
+    <Grid Margin="20">
+        <TabControl x:Name="control" SelectionChanged="TabControl_SelectionChanged"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    TabStripPlacement="Left"
+                    Padding="0"
+                    >
+
+            <!-- Стиль для вертикальных табов -->
+            <TabControl.Resources>
+                <Style TargetType="TabItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TabItem">
+                                <Border x:Name="Bd"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        Padding="12,18"
+                                        Margin="0,0,0,8"
+                                        CornerRadius="5">
+                                    <ContentPresenter ContentSource="Header" VerticalAlignment="Center" HorizontalAlignment="Left" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="Bd" Property="Background" Value="#007ACC" />
+                                        <Setter TargetName="Bd" Property="TextElement.Foreground" Value="White" />
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Bd" Property="Background" Value="#D6E9FF" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Foreground" Value="#333" />
+                    <Setter Property="Cursor" Value="Hand" />
+                </Style>
+            </TabControl.Resources>
+
+            <!-- Вкладка: Схема участков -->
+            <TabItem Header="Схема участков">
+                <Border Background="White" CornerRadius="10" Padding="20" >
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="2*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Border Grid.Column="0" Background="#E8EFF7" CornerRadius="8" Margin="0,0,20,0" >
+                            <Canvas x:Name="sectorsDiagram" Margin="10"/>
+                        </Border>
+
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center" >
+                            <TextBlock Text="Выбрать участок:" FontWeight="SemiBold" FontSize="16" Foreground="#555" Margin="0,0,0,20"/>
+                            <StackPanel x:Name="buttonsPanel" Orientation="Vertical" Background="#FAFAFA" VerticalAlignment="Bottom">
+                                <!-- Динамические кнопки -->
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </TabItem>
+
+            <!-- Вкладка: Данные об участках -->
+            <TabItem Header="Данные об участках">
+                <Border Background="White" CornerRadius="10" Padding="20" >
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <DataGrid x:Name="gridSectors" Grid.Row="0" Margin="0,0,0,20"
+                                  AutoGenerateColumns="True"
+                                  CanUserAddRows="False"
+                                  CanUserDeleteRows="False"
+                                  SelectionUnit="FullRow"
+                                  RowBackground="#FAFAFA" AlternatingRowBackground="White"
+                                  BorderBrush="#DDD" BorderThickness="1"
+                                  HeadersVisibility="Column"
+                                  FontSize="14"
+                                  MinHeight="250">
+                            <DataGrid.Columns>
+                               
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Left" >
+                            <TextBlock Text="Выберите запись для редактирования/удаления" VerticalAlignment="Center" Margin="0,0,20,0" Foreground="#777" FontStyle="Italic"/>
+                            <Button x:Name="buttonEdit" Content="Редактировать" Height="35" Margin="5,0" Padding="20,0"
+                                    Background="#007ACC" Foreground="White" BorderThickness="0" Cursor="Hand" 
+                                     />
+                            <Button x:Name="buttonDelete" Content="Удалить" Height="35" Margin="5,0" Padding="20,0"
+                                    Background="#E04E4E" Foreground="White" BorderThickness="0" Cursor="Hand" 
+                                     />
+                            <Button x:Name="buttonAdd" Content="Добавить" Height="35" Margin="5,0" Padding="20,0"
+                                    Background="#28A745" Foreground="White" BorderThickness="0" Cursor="Hand" />
+
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </TabItem>
+        </TabControl>
+    </Grid>
+
+    <!-- Стили кнопок для ховера и эффекта -->
+    <Window.Resources>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" 
+                                CornerRadius="6" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Opacity" Value="0.85"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Opacity" Value="0.7"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="border" Property="Background" Value="#AAA"/>
+                                <Setter Property="Foreground" Value="#EEE"/>
+                                <Setter Property="Cursor" Value="Arrow"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+</Window>
